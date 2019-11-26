@@ -8,6 +8,10 @@ type Node struct {
 	value      interface{}
 }
 
+type Key interface {
+	Less(other Key) (bool, error)
+}
+
 func NewNode(key uint64, value interface{}) *Node {
 	return &Node{
 		leftChild:  nil,
