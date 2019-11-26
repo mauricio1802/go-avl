@@ -4,7 +4,7 @@ package avl
 func (n *Node) nodeByKey(value Key) (bool, *Node) {
 	valueLess, _ := value.Less(n.key)
 	valueBigger, _ := n.key.Less(value)
-	valueEqual := !valueBigger && !valueLess
+	valueEqual := (!valueBigger) && (!valueLess)
 	if valueEqual || (valueBigger && !n.hasRChild()) || (valueLess && !n.hasLChild()) {
 		return true, n
 	}
@@ -27,9 +27,9 @@ func Insert(tree, newNode *Node) *Node {
 	if tree == nil {
 		return newNode
 	}
-	newNodeLess, _ := newNode.key.Less(tree.key)
-	newNodeBigger, _ := newNode.key.Less(tree.key)
 
+	newNodeLess, _ := newNode.key.Less(tree.key)
+	newNodeBigger, _ := tree.key.Less(newNode.key)
 	if newNodeLess {
 		tree.leftChild = Insert(tree.leftChild, newNode)
 	} else if newNodeBigger {
@@ -39,29 +39,34 @@ func Insert(tree, newNode *Node) *Node {
 	}
 
 	tree.updateHeight()
-
 	bl := tree.balanceFactor()
 
-	newNodeLess, _ = newNode.key.Less(tree.leftChild.key)
-	if bl > 1 && (newNodeLess) {
-		return tree.rRotation()
+	if bl > 1 {
+		newNodeLess, _ = newNode.key.Less(tree.leftChild.key)
+		newNodeBigger, _ = tree.leftChild.key.Less(newNode.key)
+		if newNodeLess {
+			return tree.rRotation()
+		}
+		if newNodeBigger {
+			tree.leftChild = tree.leftChild.lRotation()
+			return tree.rRotation()
+		}
+
 	}
 
-	newNodeBigger, _ = tree.rigthChild.key.Less(newNode.key)
-	if bl < -1 && (newNodeBigger) {
-		return tree.lRotation()
-	}
+	if bl < -1 {
+		newNodeBigger, _ = tree.rigthChild.key.Less(newNode.key)
+		newNodeLess, _ = newNode.key.Less(tree.rigthChild.key)
 
-	newNodeBigger, _ = tree.leftChild.key.Less(newNode.key)
-	if bl > 1 && (newNodeBigger) {
-		tree.leftChild = tree.leftChild.lRotation()
-		return tree.rRotation()
-	}
+		if newNodeBigger {
+			return tree.lRotation()
+		}
 
-	newNodeLess, _ = newNode.key.Less(tree.rigthChild.key)
-	if bl < -1 && (newNodeLess) {
-		tree.rigthChild = tree.rigthChild.rRotation()
-		return tree.lRotation()
+		if newNodeLess {
+			tree.rigthChild = tree.rigthChild.rRotation()
+			return tree.lRotation()
+		}
+
 	}
 
 	return tree

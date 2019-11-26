@@ -1,9 +1,16 @@
 package avl
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 type testNumber struct {
-	num int
+	num uint64
+}
+
+func (n testNumber) String() string {
+	return fmt.Sprintf("%d", n.num)
 }
 
 func (n testNumber) Less(other Key) (bool, error) {
@@ -14,7 +21,7 @@ func (n testNumber) Less(other Key) (bool, error) {
 	return n.num < key.num, nil
 }
 
-func newNumber(val int) testNumber {
+func newNumber(val uint64) testNumber {
 	return testNumber{
 		num: val,
 	}
@@ -26,7 +33,6 @@ func InsertTest() bool {
 	tree = Insert(tree, NewNode(newNumber(40), struct{}{}))
 	tree = Insert(tree, NewNode(newNumber(50), struct{}{}))
 	tree = Insert(tree, NewNode(newNumber(25), struct{}{}))
-
 	return strPreOrder(tree) == "30 20 10 25 40 50 "
 
 }
