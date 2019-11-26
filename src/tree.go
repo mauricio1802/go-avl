@@ -24,7 +24,7 @@ func (n *Node) updateHeight() {
 }
 
 func (n *Node) updateSize() {
-	n.treeSize = getSize(n.rigthChild) + getSize(n.leftChild)
+	n.treeSize = getSize(n.rigthChild) + getSize(n.leftChild) + 1
 }
 
 func (n *Node) GetKMins(k int) []*Node {
@@ -36,11 +36,15 @@ func (n *Node) GetKMins(k int) []*Node {
 		return inOrder(n)
 	}
 	if getSize(n.leftChild) >= k {
-		return inOrder(n.leftChild)
+		return n.leftChild.GetKMins(k)
 	}
 	answ := inOrder(n.leftChild)
 	answ = append(answ, n)
-	return append(answ, n.rigthChild.GetKMins(k-len(answ))...)
+	if len(answ) < k {
+		answ = append(answ, n.rigthChild.GetKMins(k-len(answ))...)
+	}
+
+	return answ
 
 }
 

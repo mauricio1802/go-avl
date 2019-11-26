@@ -7,7 +7,9 @@ func (n *Node) rRotation() *Node {
 	n.leftChild = t
 	x.rigthChild = n
 
+	n.updateSize()
 	n.updateHeight()
+	x.updateSize()
 	x.updateHeight()
 
 	return x
@@ -20,7 +22,9 @@ func (n *Node) lRotation() *Node {
 	n.rigthChild = t
 	x.leftChild = n
 
+	n.updateSize()
 	n.updateHeight()
+	x.updateSize()
 	x.updateHeight()
 
 	return x

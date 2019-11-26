@@ -11,4 +11,6 @@ func main() {
 	fmt.Println(avl.InsertTest())
 	fmt.Println("DELETE TEST")
 	fmt.Println(avl.DeleteTest())
+	fmt.Println("GET K MINS TEST")
+	fmt.Println(avl.GetKMinsTest())
 }
