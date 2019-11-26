@@ -5,7 +5,7 @@ type Node struct {
 	rigthChild *Node
 	height     int
 	key        Key
-	value      interface{}
+	Value      interface{}
 }
 
 type Key interface {
