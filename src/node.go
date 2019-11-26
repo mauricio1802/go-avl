@@ -9,7 +9,7 @@ type Node struct {
 }
 
 type Key interface {
-	Less(other Key) (bool, error)
+	Less(other interface{}) (bool, error)
 }
 
 func NewNode(key Key, value interface{}) *Node {

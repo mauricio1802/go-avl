@@ -13,7 +13,7 @@ func (n testNumber) String() string {
 	return fmt.Sprintf("%d", n.num)
 }
 
-func (n testNumber) Less(other Key) (bool, error) {
+func (n testNumber) Less(other interface{}) (bool, error) {
 	key, ok := other.(testNumber)
 	if !ok {
 		return false, errors.New("Wrong type")
