@@ -23,6 +23,36 @@ func (n *Node) updateHeight() {
 	n.height = max(getHeight(n.rigthChild), getHeight(n.leftChild)) + 1
 }
 
+func (n *Node) updateSize() {
+	n.treeSize = getSize(n.rigthChild) + getSize(n.leftChild)
+}
+
+func (n *Node) GetKMins(k int) []*Node {
+
+	if k == 0 {
+		return make([]*Node, 0)
+	}
+	if getSize(n) <= k {
+		return inOrder(n)
+	}
+	if getSize(n.leftChild) >= k {
+		return inOrder(n.leftChild)
+	}
+	answ := inOrder(n.leftChild)
+	answ = append(answ, n)
+	return append(answ, n.rigthChild.GetKMins(k-len(answ))...)
+
+}
+
+func inOrder(n *Node) []*Node {
+	if n == nil {
+		return make([]*Node, 0)
+	}
+	answ := inOrder(n.leftChild)
+	answ = append(answ, n)
+	return append(answ, inOrder(n.rigthChild)...)
+}
+
 func Insert(tree, newNode *Node) *Node {
 	if tree == nil {
 		return newNode
@@ -37,7 +67,7 @@ func Insert(tree, newNode *Node) *Node {
 	} else {
 		return tree
 	}
-
+	tree.updateSize()
 	tree.updateHeight()
 	bl := tree.balanceFactor()
 
@@ -100,6 +130,7 @@ func Delete(tree *Node, key Key) *Node {
 	}
 
 	tree.updateHeight()
+	tree.updateSize()
 
 	bl := tree.balanceFactor()
 

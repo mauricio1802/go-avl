@@ -5,6 +5,7 @@ type Node struct {
 	rigthChild *Node
 	height     int
 	key        Key
+	treeSize   int
 	value      interface{}
 }
 
@@ -19,6 +20,7 @@ func NewNode(key Key, value interface{}) *Node {
 		height:     1,
 		key:        key,
 		value:      value,
+		treeSize:   1,
 	}
 }
 
@@ -39,4 +41,11 @@ func getHeight(n *Node) int {
 		return 0
 	}
 	return n.height
+}
+
+func getSize(n *Node) int {
+	if n == nil {
+		return 0
+	}
+	return n.treeSize
 }
