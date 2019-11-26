@@ -13,6 +13,6 @@ func strPreOrder(tree *Node) string {
 	if tree == nil {
 		return ""
 	}
-	return fmt.Sprintf("%d %s%s", tree.key, strPreOrder(tree.leftChild), strPreOrder(tree.rigthChild))
+	return fmt.Sprintf("%s %s%s", tree.key, strPreOrder(tree.leftChild), strPreOrder(tree.rigthChild))
 
 }

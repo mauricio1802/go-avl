@@ -1,17 +1,20 @@
 package avl
 
 //If existe a node with key == value return true and the node with key == value, if there is not return false and the node that would be it's father
-func (n *Node) nodeByKey(value uint64) (bool, *Node) {
-	if value == n.key || (value > n.key && !n.hasRChild()) || (value < n.key && !n.hasLChild()) {
+func (n *Node) nodeByKey(value Key) (bool, *Node) {
+	valueLess, _ := value.Less(n.key)
+	valueBigger, _ := n.key.Less(value)
+	valueEqual := (!valueBigger) && (!valueLess)
+	if valueEqual || (valueBigger && !n.hasRChild()) || (valueLess && !n.hasLChild()) {
 		return true, n
 	}
-	if value < n.key {
+	if valueLess {
 		return n.leftChild.nodeByKey(value)
 	}
 	return n.rigthChild.nodeByKey(value)
 }
 
-func (n *Node) HasKey(value uint64) bool {
+func (n *Node) HasKey(value Key) bool {
 	answ, _ := n.nodeByKey(value)
 	return answ
 }
@@ -25,47 +28,60 @@ func Insert(tree, newNode *Node) *Node {
 		return newNode
 	}
 
-	if newNode.key < tree.key {
+	newNodeLess, _ := newNode.key.Less(tree.key)
+	newNodeBigger, _ := tree.key.Less(newNode.key)
+	if newNodeLess {
 		tree.leftChild = Insert(tree.leftChild, newNode)
-	} else if newNode.key > tree.key {
+	} else if newNodeBigger {
 		tree.rigthChild = Insert(tree.rigthChild, newNode)
 	} else {
 		return tree
 	}
 
 	tree.updateHeight()
-
 	bl := tree.balanceFactor()
 
-	if bl > 1 && (newNode.key < tree.leftChild.key) {
-		return tree.rRotation()
+	if bl > 1 {
+		newNodeLess, _ = newNode.key.Less(tree.leftChild.key)
+		newNodeBigger, _ = tree.leftChild.key.Less(newNode.key)
+		if newNodeLess {
+			return tree.rRotation()
+		}
+		if newNodeBigger {
+			tree.leftChild = tree.leftChild.lRotation()
+			return tree.rRotation()
+		}
+
 	}
 
-	if bl < -1 && (newNode.key > tree.rigthChild.key) {
-		return tree.lRotation()
-	}
+	if bl < -1 {
+		newNodeBigger, _ = tree.rigthChild.key.Less(newNode.key)
+		newNodeLess, _ = newNode.key.Less(tree.rigthChild.key)
 
-	if bl > 1 && (newNode.key > tree.leftChild.key) {
-		tree.leftChild = tree.leftChild.lRotation()
-		return tree.rRotation()
-	}
+		if newNodeBigger {
+			return tree.lRotation()
+		}
 
-	if bl < -1 && (newNode.key < tree.rigthChild.key) {
-		tree.rigthChild = tree.rigthChild.rRotation()
-		return tree.lRotation()
+		if newNodeLess {
+			tree.rigthChild = tree.rigthChild.rRotation()
+			return tree.lRotation()
+		}
+
 	}
 
 	return tree
 }
 
-func Delete(tree *Node, key uint64) *Node {
+func Delete(tree *Node, key Key) *Node {
 	if tree == nil {
 		return tree
 	}
 
-	if key < tree.key {
+	keyLess, _ := key.Less(tree.key)
+	keyBigger, _ := tree.key.Less(key)
+	if keyLess {
 		tree.leftChild = Delete(tree.leftChild, key)
-	} else if key > tree.key {
+	} else if keyBigger {
 		tree.rigthChild = Delete(tree.rigthChild, key)
 	} else {
 		if tree.leftChild == nil || tree.rigthChild == nil {
