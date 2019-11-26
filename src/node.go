@@ -4,7 +4,7 @@ type Node struct {
 	leftChild  *Node
 	rigthChild *Node
 	height     int
-	key        uint64
+	key        Key
 	value      interface{}
 }
 
@@ -12,7 +12,7 @@ type Key interface {
 	Less(other Key) (bool, error)
 }
 
-func NewNode(key uint64, value interface{}) *Node {
+func NewNode(key Key, value interface{}) *Node {
 	return &Node{
 		leftChild:  nil,
 		rigthChild: nil,
