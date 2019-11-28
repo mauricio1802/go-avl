@@ -19,6 +19,14 @@ func (n *Node) HasKey(value Key) bool {
 	return answ
 }
 
+func (n *Node) GetNode(value Key) (bool, *Node) {
+	exist, node := n.nodeByKey(value)
+	if !exist {
+		return false, nil
+	}
+	return true, node
+}
+
 func (n *Node) updateHeight() {
 	n.height = max(getHeight(n.rigthChild), getHeight(n.leftChild)) + 1
 }
