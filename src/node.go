@@ -5,7 +5,7 @@ type Node struct {
 	rigthChild *Node
 	height     int
 	key        Key
-	value      interface{}
+	Value      interface{}
 }
 
 type Key interface {
@@ -18,7 +18,7 @@ func NewNode(key Key, value interface{}) *Node {
 		rigthChild: nil,
 		height:     1,
 		key:        key,
-		value:      value,
+		Value:      value,
 	}
 }
 
