@@ -5,8 +5,11 @@ func (n *Node) nodeByKey(value Key) (bool, *Node) {
 	valueLess, _ := value.Less(n.key)
 	valueBigger, _ := n.key.Less(value)
 	valueEqual := (!valueBigger) && (!valueLess)
-	if valueEqual || (valueBigger && !n.hasRChild()) || (valueLess && !n.hasLChild()) {
+	if valueEqual {
 		return true, n
+	}
+	if (valueBigger && !n.hasRChild()) || (valueLess && !n.hasLChild()) {
+		return false, n
 	}
 	if valueLess {
 		return n.leftChild.nodeByKey(value)
