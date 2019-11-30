@@ -168,6 +168,10 @@ func Delete(tree *Node, key Key) *Node {
 
 }
 
+func (n *Node) GetSize() int {
+	return getSize(n)
+}
+
 func (n *Node) balanceFactor() int {
 	return getHeight(n.leftChild) - getHeight(n.rigthChild)
 }
@@ -180,4 +184,11 @@ func getMinNode(tree *Node) *Node {
 }
 func getSuccessorNode(tree *Node) *Node {
 	return getMinNode(tree.rigthChild)
+}
+
+func (n *Node) GetMax() *Node {
+	if !n.hasRChild() {
+		return n
+	}
+	return n.rigthChild.GetMax()
 }
